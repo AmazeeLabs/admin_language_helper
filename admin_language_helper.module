@@ -1,0 +1,46 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\field\FieldConfigInterface;
+
+/**
+ * Implements hook_entity_prepare_form().
+ */
+function admin_language_helper_entity_prepare_form(EntityInterface $entity, $operation, FormStateInterface $form_state) {
+  
+  // Process new fieldable entities.
+  if ($entity->isNew() && $entity instanceof FieldableEntityInterface) {
+    $language_manager = \Drupal::languageManager();
+    $config_language = $language_manager->getConfigOverrideLanguage();
+    $language_content = $language_manager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
+
+    // If current content language is different from the config override
+    // language, reload default field values in content language.
+    if ($config_language->getId() != $language_content->getId()) {
+      $entity_type_id = $entity->getEntityTypeId();
+      $bundle = $entity->bundle();
+      foreach ($entity->getFields(FALSE) as $field_name => $field) {
+        if ($field->getFieldDefinition() instanceof FieldConfigInterface && $field->count()) {
+          
+          // Load field config in current content language.
+          $language_manager->setConfigOverrideLanguage($language_content);
+          $field_config = \Drupal::config("field.field.$entity_type_id.$bundle.$field_name");
+          $language_manager->setConfigOverrideLanguage($config_language);
+          
+          // Skip fields using default value callback.
+          if ($field_config->get('default_value_callback')) {
+            continue;
+          }
+
+          // Check if new default value is different from the current one.
+          if ($field->getValue() != $default_value = $field_config->get('default_value')) {
+            $field->setValue($default_value);
+          }
+        }
+      }
+    }
+  }
+}
