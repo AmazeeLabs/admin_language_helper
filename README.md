@@ -29,7 +29,7 @@ First of all, few patches are required to make the following works.
 
 Example language detection configuration:
 
-<img src="docs/language-detection.png" width="683">
+<img src="docs/language-detection.png" width="678">
 
 Don't forget that users should set "Administration pages language" in their profiles.
 
