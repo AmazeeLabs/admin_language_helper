@@ -16,7 +16,7 @@ This module does not provide much functionality. You may not need it at all. The
 
 ### Patches
 
-First of all, few bug-fix patches are required to make the following works.
+First of all, few patches are required to make the following works.
 
 - Fix language detection: https://www.drupal.org/node/2189267
 - Add "Content language selected for page" language option: https://www.drupal.org/node/2720251
