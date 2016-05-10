@@ -24,7 +24,7 @@ First of all, few patches are required to make the following works.
 ### /admin/config/regional/language/detection
 
 - Content language is customized
-- Interface and content language detection is configured in the same way
+- Interface and content language detection are configured in the same way
 - Interface language has "Account administration pages" method in the first place
 
 Example language detection configuration:
