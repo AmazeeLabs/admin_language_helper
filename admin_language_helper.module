@@ -19,7 +19,7 @@ function admin_language_helper_entity_prepare_form(EntityInterface $entity, $ope
 
     // If current content language is different from the config override
     // language, reload default field values in content language.
-    if ($config_language->getId() != $language_content->getId()) {
+    if ($config_language && $language_content && $config_language->getId() != $language_content->getId()) {
       $entity_type_id = $entity->getEntityTypeId();
       $bundle = $entity->bundle();
       foreach ($entity->getFields(FALSE) as $field_name => $field) {
